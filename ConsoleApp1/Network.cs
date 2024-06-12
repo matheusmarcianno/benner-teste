@@ -21,8 +21,17 @@
             var foundFirstElement = Find(firsValue);
             var foundSecondElement = Find(secondValue);
 
-            foundFirstElement!.ConnectedElements.Add(foundSecondElement!.Id);
+            foundFirstElement.ConnectedElements.Add(foundSecondElement.Id);
             foundSecondElement.ConnectedElements.Add(foundFirstElement.Id);
+
+            if (foundSecondElement.ConnectedElements.Count != 0)
+                foundFirstElement.ConnectedElements.AddRange(foundSecondElement.ConnectedElements);
+
+            if (foundFirstElement.ConnectedElements.Count != 0)
+                foundSecondElement.ConnectedElements.AddRange(foundFirstElement.ConnectedElements);
+
+            foundFirstElement.ConnectedElements = foundFirstElement.ConnectedElements.Distinct().ToList();
+            foundSecondElement.ConnectedElements = foundSecondElement.ConnectedElements.Distinct().ToList();
         }
 
         public bool Query(int firsValue, int secondValue)
@@ -51,6 +60,7 @@
         {
             foreach (var connectedElement in firstElement!.ConnectedElements)
             {
+
                 if (connectedElement == secondElement.Id)
                 {
                     ElementsAreConnected = true;
